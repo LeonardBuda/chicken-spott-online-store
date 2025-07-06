@@ -1,0 +1,5 @@
+venv/
+__pycache__/
+*.pyc
+serviceAccountKey.json
+chicken-spott-firebase-adminsdk-fbsvc-978ce982ec.json
