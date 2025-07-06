@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Gallery - 010 Café{% endblock %}
+{% block content %}
+    <h1>Gallery 📸🎉</h1>
+
+    <div style="text-align: center; width: 100%; min-height: 80vh; padding: 20px;">
+        <h2>Our Menu Pictures 🍽️✨</h2>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+            <img src="/static/menu1.jpg" alt="Menu 1" style="width: 300px; height: auto; border: 5px solid #2c3e50; border-radius: 10px;" loading="lazy">
+            <img src="/static/menu2.jpg" alt="Menu 2" style="width: 300px; height: auto; border: 5px solid #2c3e50; border-radius: 10px;" loading="lazy">
+            <img src="/static/menu3.jpg" alt="Menu 3" style="width: 300px; height: auto; border: 5px solid #2c3e50; border-radius: 10px;" loading="lazy">
+            <!-- Add more images as needed based on the exact number of attached pictures -->
+        </div>
+        <p>More delicious visuals coming soon... ⏳📷</p>
+    </div>
+
+    <a href="/">Back ⬅️</a>
+{% endblock %}

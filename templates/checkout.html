@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Checkout - 010 Café{% endblock %}
+{% block content %}
+    <h1>Checkout 🛒💳</h1>
+    <div style="text-align: center; padding: 20px;">
+        <h2>Order Summary 🌟</h2>
+        <ul>
+            {% for item in cart_items %}
+                <li>{{ item.name }} - {% if 'quantity' in item %}R{{ item.amount|floatformat(2) }} x {{ item.quantity }} = R{{ item.total|floatformat(2) }}{% else %}R{{ item.amount|floatformat(2) }}{% endif %}</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Total: R{{ total|floatformat(2) }} 💸</strong></p>
+
+        <h2>Customer Details 📝</h2>
+        <form action="/checkout" method="POST">
+            <input type="text" name="name" value="{{ remembered_customer.get('name', '') }}" placeholder="Name" required><br><br>
+            <input type="text" name="surname" value="{{ remembered_customer.get('surname', '') }}" placeholder="Surname"><br><br>
+            <input type="tel" name="phone" value="{{ remembered_customer.get('phone', '') }}" placeholder="Phone" required><br><br>
+            <input type="email" name="email" value="{{ remembered_customer.get('email', '') }}" placeholder="Email" required><br><br>
+            <label>Order Type:</label>
+            <select name="delivery" required>
+                <option value="false">Collection 📦</option>
+                <option value="true">Delivery 🚚</option>
+            </select><br><br>
+            <input type="text" name="address" placeholder="Delivery Address (if applicable)"><br><br>
+            <input type="checkbox" name="remember" value="true"> Remember me<br><br>
+            <button type="submit">Place Order 🚀</button>
+        </form>
+        {% if delivery_fee is defined %}
+            <p><strong>Delivery Fee: R{{ delivery_fee|floatformat(2) }} ({{ distance_km|floatformat(2) }} km @ R6/km)</strong></p>
+        {% endif %}
+    </div>
+{% endblock %}
