@@ -2,190 +2,191 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}010 Café{% endblock %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4a460;
-            color: #2c3e50;
-            text-align: center;
-            -webkit-text-size-adjust: 100%;
+            background-color: #f5e8c7;
+            color: #4a2c2a;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         nav {
-            background-color: #e74c3c;
-            padding: 10px;
-            margin-bottom: 20px;
+            background-color: #26a69a;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            gap: 15px;
+            justify-content: center;
         }
-        nav img {
-            max-height: 40px;
-            margin-right: 10px;
-            margin-left: 10px;
+        nav ul li {
+            display: inline;
         }
-        nav a {
-            color: #fff;
-            margin: 0 10px;
+        nav ul li a {
             text-decoration: none;
-            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+            padding: 5px 10px;
+            transition: color 0.3s;
         }
-        nav a:hover {
-            text-decoration: underline;
-            color: #f4a460;
+        nav ul li a:hover {
+            color: #d4e157;
         }
-        .content {
+        main {
+            flex: 1 0 auto;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1, h2, h3 {
-            color: #e74c3c;
+        h1, h2 {
+            color: #000;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f9f1e7;
+            border-left: 4px solid #26a69a;
+            border-radius: 4px;
+        }
+        .menu-item .description {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        form {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        input[type="number"], select, input[type="text"], input[type="email"], textarea {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 3em; /* 3-digit width for Qty */
+        }
+        select {
+            width: 150px; /* Increased width to show "All-In-One 🟡" */
+        }
+        textarea {
+            width: 100%;
+            max-width: 300px;
+            min-height: 100px;
+        }
+        button {
+            background-color: #8d6e63;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #6d4c41;
         }
         a {
-            color: #3498db;
+            color: #26a69a;
             text-decoration: none;
+            font-weight: bold;
         }
         a:hover {
             text-decoration: underline;
         }
         footer {
-            background-color: #2c3e50;
+            flex-shrink: 0;
+            margin-top: auto;
+            padding: 10px 0;
+            background-color: #4a2c2a;
             color: #fff;
-            padding: 10px;
-            width: 100%;
             text-align: center;
-            position: relative;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
-        .facebook-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #3b5998;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 14px;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            min-width: 150px;
-            text-align: center;
+        footer a {
+            color: #d4e157;
         }
-        .facebook-btn:hover {
-            background-color: #2d4373;
-        }
-        .menu-form {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin: 5px 0;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
             margin: 10px 0;
-            text-align: left;
         }
-        .cart-item .description {
-            flex-grow: 1;
-            padding-right: 20px;
-            word-break: break-word;
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
-        .cart-item .amount {
-            text-align: right;
-            min-width: 100px;
-        }
-        /* Mobile-friendly adjustments */
-        @media (max-width: 768px) {
-            nav {
+        @media (max-width: 600px) {
+            nav ul {
                 flex-direction: column;
-                align-items: center;
-                padding: 5px;
+                text-align: center;
             }
-            nav img {
-                margin-bottom: 10px;
-                max-height: 30px;
-            }
-            nav a {
-                display: block;
-                margin: 5px 0;
-                font-size: 14px;
-            }
-            .content {
+            main {
+                margin: 10px;
                 padding: 10px;
             }
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-            form {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-            }
-            input, select, textarea, button {
-                width: 100%;
-                margin: 5px 0;
-                padding: 12px;
-                font-size: 16px;
-                border-radius: 5px;
-                box-sizing: border-box;
-            }
-            button {
-                background-color: #e74c3c;
-                color: #fff;
-                border: none;
-                cursor: pointer;
-                padding: 12px;
-                font-size: 16px;
-            }
-            button:hover {
-                background-color: #c0392b;
-            }
-            .facebook-btn {
-                bottom: 10px;
-                right: 10px;
-                padding: 10px 20px;
-                font-size: 12px;
-                min-width: 120px;
-            }
-            footer {
-                position: relative;
-                padding: 5px;
-                font-size: 12px;
-            }
-            .menu-form {
-                flex-direction: column;
-                align-items: flex-end;
-                width: 100%;
-            }
-            .menu-form input, .menu-form select, .menu-form button {
-                width: 100%;
-                margin: 5px 0;
-            }
-            .cart-item {
+            .menu-item {
                 flex-direction: column;
                 text-align: left;
             }
-            .cart-item .amount {
-                text-align: right;
-                width: 100%;
+            .menu-item form {
                 margin-top: 5px;
+                width: 100%;
             }
         }
     </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('menus') }}">Menus</a></li>
+            <li><a href="{{ url_for('store_location') }}">Store Location</a></li>
+            <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+            <li><a href="{{ url_for('rate_us') }}">Rate Us</a></li>
+            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+            <li><a href="{{ url_for('view_cart') }}">View Cart</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('track_order') }}">Track Order</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+            {% if back_url %}
+                <p><a href="{{ back_url }}">Back ⬅️</a></p>
+            {% endif %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>📍 30558 Heald Street (Esihlahleni) Daveyton 1520</p>
+        <p>📞 0110701646 | 📧 <a href="mailto:chickenspott010@gmail.com">chickenspott010@gmail.com</a></p>
+        <p><a href="https://www.facebook.com/chickenspott/" target="_blank">Follow us on Facebook! 👍</a></p>
+    </footer>
     <script>
-        // Simple popup for add_to_cart and checkout
         document.addEventListener('DOMContentLoaded', function() {
-            const addForms = document.querySelectorAll('form[action="/add_to_cart"]');
-            addForms.forEach(f => {
-                f.addEventListener('submit', function(e) {
+            const forms = document.querySelectorAll('form[action="/add_to_cart"]');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
                     e.preventDefault();
                     const formData = new FormData(this);
                     fetch('/add_to_cart', {
@@ -194,60 +195,16 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                        } else {
+                        if (data.message) {
                             alert(data.message);
+                        } else if (data.error) {
+                            alert('Error: ' + data.error);
                         }
                     })
-                    .catch(error => alert('Error adding to cart: ' + error));
+                    .catch(error => alert('Error submitting form: ' + error));
                 });
             });
-
-            const checkoutForm = document.querySelector('form[action="/checkout"]');
-            if (checkoutForm) {
-                checkoutForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
-                    fetch('/checkout', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => alert('Error placing order: ' + error));
-                });
-            }
         });
     </script>
-</head>
-<body>
-    <nav>
-        <img src="/static/logo.png" alt="010 Café Logo" loading="lazy">
-        <a href="/">Home</a> |
-        <a href="/menus">Menus</a> |
-        <a href="/store_location">Store Location</a> |
-        <a href="/faqs">FAQs</a> |
-        <a href="/rate_us">Rate Us</a> |
-        <a href="/gallery">Gallery</a> |
-        <a href="/view_cart">View Cart</a> |
-        <a href="/contact">Contact</a> |
-        <a href="/about">About</a> |
-        <a href="/track_order">Track Order</a>
-    </nav>
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
-    <footer>
-        📍 30558 Heald Street (Esihlahleni) Daveyton 1520<br>
-        📞 0110701646 | 📧 chickenspott010@gmail.com
-    </footer>
-    <a href="https://www.facebook.com/chickenspott/" class="facebook-btn">Follow us on Facebook! 👍</a>
 </body>
 </html>

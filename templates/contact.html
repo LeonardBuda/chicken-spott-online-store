@@ -1,20 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Contact - 010 Café{% endblock %}
 {% block content %}
+    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
     <h1>Contact Us 📞✨</h1>
-
-    <form action="/contact" method="POST">
-        <label for="name">Name* 🌟:</label>
-        <input type="text" name="name" required><br>
-
-        <label for="email">Email* ✉️:</label>
-        <input type="email" name="email" required><br>
-
-        <label for="message">Message* 📝:</label>
-        <textarea name="message" required></textarea><br>
-
-        <button type="submit">Send Message 🚀</button>
-    </form>
-
-    <a href="/">Back ⬅️</a>
+    <div class="contact-form">
+        <form method="POST" action="{{ url_for('contact') }}">
+            <input type="text" name="name" placeholder="Name* 🌟" required>
+            <input type="email" name="email" placeholder="Email* ✉️" required>
+            <textarea name="message" placeholder="Message* 📝" required></textarea>
+            <button type="submit">Send Message 🚀</button>
+        </form>
+    </div>
+    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
 {% endblock %}

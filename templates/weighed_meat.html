@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Weighed Meat - 010 Café 🌟🥳{% endblock %}
+{% block content %}
+    <p><a href="{{ url_for('menus') }}">Back ⬅️🍴</a></p>
+    <h1>Weighed Meat 🥩🎉</h1>
+    <ul>
+        {% for item in menu %}
+            <li class="menu-item">
+                <div class="description">
+                    {{ item.name }} 🍽️😋 - Enter amount 💰
+                </div>
+                <form action="{{ url_for('add_to_cart') }}" method="POST">
+                    <input type="hidden" name="name" value="{{ item.name }}">
+                    <input type="number" name="amount" value="0" min="0" step="0.01" placeholder="R">
+                    <button type="submit">Add to Cart 🛒🥳</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <p><a href="{{ url_for('menus') }}">Back to Menus ⬅️🍴</a> | <a href="{{ url_for('view_cart') }}">View Cart 🛒</a></p>
+{% endblock %}

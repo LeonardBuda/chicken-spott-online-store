@@ -1,90 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Menus - 010 Café{% endblock %}
 {% block content %}
+    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
     <h1>Menus 🍔🎉</h1>
-
-    {% for category_name, category in menu.items() if category_name in ["Chicken Menu", "Kota Menu", "010 Cafe Menu", "Weighed Meat", "Specials", "Sides Menu", "Drinks Menu"] %}
-        <h2 style="color: black;">{{ category_name }} 🌟</h2>
-
-        {% if category is sequence and category is not mapping %}
-            <div style="text-align: left; margin-left: 20px;">
-                {% for item in category %}
-                    <p>{{ item.name }} 🍽️{% if item.price is defined %} - R{{ item.price|floatformat(2) }} 💸{% endif %}</p>
-                    <form action="/add_to_cart" method="POST" class="menu-form">
-                        <input type="hidden" name="name" value="{{ item.name }}">
-                        {% if category_name == "Weighed Meat" %}
-                            <input type="number" name="amount" min="0" step="0.01" placeholder="Enter Amount in Rands" required style="margin-right: 10px; width: 100px;">
-                        {% endif %}
-                        <input type="number" name="quantity" min="1" value="1" required style="margin-right: 10px; width: 60px;">
-                        <button type="submit">Add to Cart 🛒</button>
-                    </form>
-                {% endfor %}
-            </div>
-        {% else %}
-            {% for subcat, items in category.items() %}
-                <h3 style="color: black;">{{ subcat }} 🥪</h3>
-                <div style="text-align: left; margin-left: 40px;">
-                    <ul style="list-style-type: none; padding: 0;">
-                        {% for item in items %}
-                            <li style="margin: 10px 0;">
-                                {{ loop.index }}. {{ item.name }} - R{{ item.price|floatformat(2) }} 💸
-                                <form action="/add_to_cart" method="POST" class="menu-form">
-                                    <input type="hidden" name="name" value="{{ item.name }}">
-                                    {% if category_name == "Chicken Menu" and subcat in ["Meals", "Plates", "Combos"] %}
-                                        <select name="flavor" style="margin-right: 10px; width: 100px;">
-                                            <option value="Hot">Hot 🔴</option>
-                                            <option value="Mild">Mild 🟢</option>
-                                            <option value="All-In-One">All-In-One 🟡</option>
-                                        </select>
-                                    {% elif category_name == "Kota Menu" and subcat == "Babalazi Chips" %}
-                                        {% if item.name in ["Chicken Small Chips + Quarter Chicken + Chakalaka", "Chicken Small Chips + Quarter Chicken + Full Russian + Chakalaka", "Chicken Medium Chips + Half Chicken + Chakalaka", "Chicken Medium Chips + Half Chicken + 2x Russian + Chakalaka", "Chicken Large Chips + Full Chicken + Chakalaka", "Chicken Large Chips + Full Chicken + 4x Russian + Chakalaka"] %}
-                                            <select name="flavor" style="margin-right: 10px; width: 100px;">
-                                                <option value="Hot">Hot 🔴</option>
-                                                <option value="Mild">Mild 🟢</option>
-                                                <option value="All-In-One">All-In-One 🟡</option>
-                                            </select>
-                                        {% endif %}
-                                    {% elif category_name == "010 Cafe Menu" and subcat == "Kream Dala Kream" %}
-                                        <select name="burger_type" style="margin-right: 10px; width: 100px;">
-                                            <option value="Cheese">Cheese Burger 🧀</option>
-                                            <option value="Beef">Beef Burger 🥩</option>
-                                        </select>
-                                    {% elif category_name in ["Sides Menu", "010 Cafe Menu"] and item.name in ["Chicken Feet", "Gizzards"] %}
-                                        <select name="flavor" style="margin-right: 10px; width: 100px;">
-                                            <option value="Hot">Hot 🔴</option>
-                                            <option value="Mild">Mild 🟢</option>
-                                            <option value="All-In-One">All-In-One 🟡</option>
-                                        </select>
-                                    {% elif category_name == "Specials" %}
-                                        <select name="flavor" style="margin-right: 10px; width: 100px;">
-                                            <option value="Hot">Hot 🔴</option>
-                                            <option value="Mild">Mild 🟢</option>
-                                            <option value="All-In-One">All-In-One 🟡</option>
-                                        </select>
-                                    {% elif category_name == "010 Cafe Menu" and subcat == "Slices" and item.name not in ["Chicken Feet", "Gizzards"] %}
-                                        <select name="flavor" style="margin-right: 10px; width: 100px;">
-                                            <option value="Hot">Hot 🔴</option>
-                                            <option value="Mild">Mild 🟢</option>
-                                            <option value="All-In-One">All-In-One 🟡</option>
-                                        </select>
-                                    {% endif %}
-                                    <input type="number" name="quantity" min="1" value="1" required style="margin-right: 10px; width: 60px;">
-                                    <button type="submit">Add to Cart 🛒</button>
-                                </form>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% if loop.last and category_name != "Weighed Meat" %}
-                        <p><a href="/">Back ⬅️</a></p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
-
-    {% if category_name == "Specials" %}
-        <p style="color: black; margin-top: 10px;">(Available only on Mondays & Wednesdays between 10am to 2pm) 🌟</p>
-    {% endif %}
-
-    <a href="/view_cart">View Cart 🛒</a> | <a href="/">Back ⬅️</a>
+    <p>Explore our delicious offerings by selecting a category below:</p>
+    <ul>
+        <li><a href="{{ url_for('chicken_menu') }}">Chicken Menu 🍗</a></li>
+        <li><a href="{{ url_for('kota_menu') }}">Kota Menu 🥪</a></li>
+        <li><a href="{{ url_for('cafe_menu') }}">010 Cafe Menu 🍔</a></li>
+        <li><a href="{{ url_for('weighed_meat') }}">Weighed Meat 🥩</a></li>
+        <li><a href="{{ url_for('sides_menu') }}">Sides Menu 🥗</a></li>
+        <li><a href="{{ url_for('drinks_menu') }}">Drinks Menu 🥤</a></li>
+        <li><a href="{{ url_for('specials') }}">Specials 🌟 (Available only on Mondays & Wednesdays between 10am to 2pm)</a></li>
+    </ul>
+    <p><a href="{{ url_for('view_cart') }}">View Cart 🛒</a> | <a href="{{ url_for('home') }}">Back ⬅️</a></p>
 {% endblock %}

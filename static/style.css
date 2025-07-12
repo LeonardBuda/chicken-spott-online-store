@@ -1,0 +1,10 @@
+ul { list-style: none; padding: 0; }
+li { margin-bottom: 10px; }
+h1, h2 { color: #333; }
+form { display: inline-block; margin-left: 10px; }
+nav ul { display: flex; gap: 10px; }
+nav ul li { display: inline; }
+footer { margin-top: 20px; text-align: center; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cart-item-name { flex-grow: 1; text-align: left; }
+.cart-item-amount { text-align: right; }

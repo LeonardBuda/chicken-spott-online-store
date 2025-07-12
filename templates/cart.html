@@ -2,18 +2,32 @@
 {% block title %}Your Cart - 010 Café{% endblock %}
 {% block content %}
     <h1>Your Cart 🎉</h1>
-
     {% if cart_items %}
         <ul>
             {% for item in cart_items %}
-                <li>{{ item.name }} - R{{ item.amount|floatformat(2) }} 💰{% if item.quantity %} x {{ item.quantity }} 🛒 = R{{ item.total|floatformat(2) }} 💸{% endif %}</li>
+                <li>
+                    {{ item.name }}
+                    <form action="{{ url_for('remove_from_cart') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="name" value="{{ item.name }}">
+                        <button type="submit">Remove 🗑️</button>
+                    </form>
+                    {% if 'quantity' in item %}
+                        R{{ item.amount|floatformat(2) }} 💰 x {{ item.quantity }} 🛒 = R{{ item.total|floatformat(2) }} 💸
+                    {% else %}
+                        R{{ item.amount|floatformat(2) }} 💰
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
-        <p class="total">Total: R{{ total|floatformat(2) }} 💰🎊</p>
-        <a href="/checkout">Checkout ✅</a> | <a href="/clear_cart">Clear Cart 🗑️</a> | <a href="/menus">Add Items ➕</a>
+        <p>Total: R{{ total|floatformat(2) }} 💰🎊</p>
+        <p>
+            <a href="{{ url_for('checkout') }}">Checkout ✅</a> |
+            <a href="{{ url_for('clear_cart') }}">Clear Cart 🗑️</a> |
+            <a href="{{ url_for('menus') }}">Add Items ➕</a>
+        </p>
     {% else %}
         <p>Cart is empty 😞</p>
-        <a href="/menus">Add Items ➕</a>
+        <p><a href="{{ url_for('menus') }}">Add Items ➕</a></p>
     {% endif %}
-    <a href="/">Back ⬅️</a>
+    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
 {% endblock %}

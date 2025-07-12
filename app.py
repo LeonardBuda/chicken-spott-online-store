@@ -34,46 +34,120 @@ db = firestore.client()
 # Menu data
 menu = {
     "Chicken Menu": {
-        "Meals": [{"name": "Chicken 1/4 Chicken", "price": 35.00}, {"name": "Chicken 1/2 Chicken", "price": 65.00}, {"name": "Chicken Full Chicken", "price": 120.00}],
-        "Plates": [{"name": "Chicken 1/4 Chicken Plate", "price": 60.00}, {"name": "Chicken 1/2 Chicken Plate", "price": 90.00}, {"name": "Chicken Full Chicken Plate", "price": 160.00}],
-        "Combos": [{"name": "Chicken Chicken 1/4 Chicken Plate + 440ml Coke", "price": 77.00}, {"name": "Chicken Chicken 1/4 Chicken Plate + 500ml Bon Aqua Still", "price": 70.00}, {"name": "Chicken Chicken 1/2 Chicken Plate + 440ml Coke", "price": 107.00}, {"name": "Chicken Chicken Full Chicken Plate + 2L Coke", "price": 190.00}, {"name": "Chicken Chicken 1/4 Chicken Plate + 330ml Cappy Juice", "price": 76.00}]
+        "Meals": [
+            {"name": "1/4 Chicken", "price": 35.00},
+            {"name": "1/2 Chicken", "price": 65.00},
+            {"name": "Full Chicken", "price": 120.00}
+        ],
+        "Plates": [
+            {"name": "1/4 Chicken Plate", "price": 60.00},
+            {"name": "1/2 Chicken Plate", "price": 90.00},
+            {"name": "Full Chicken Plate", "price": 160.00}
+        ],
+        "Combos": [
+            {"name": "1/4 Chicken Plate + 440ml Coke", "price": 77.00},
+            {"name": "1/4 Chicken Plate + 500ml Bon Aqua Still", "price": 70.00},
+            {"name": "1/2 Chicken Plate + 440ml Coke", "price": 107.00},
+            {"name": "Full Chicken Plate + 2L Coke", "price": 190.00},
+            {"name": "1/4 Chicken Plate + 330ml Cappy Juice", "price": 76.00}
+        ]
     },
     "Kota Menu": {
-        "Kotas": [{"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Chicken Burger", "price": 50.00}, {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Russian", "price": 60.00}, {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Beef Burger, Bacon", "price": 70.00}, {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Chicken Burger, Russian", "price": 75.00}],
-        "Slices": [{"name": "Chips, Secret Dressing, Egg, Cheese, Chicken Burger", "price": 50.00}, {"name": "Chips, Secret Dressing, Egg, Cheese, Beef Burger, Bacon", "price": 70.00}, {"name": "Chips, Secret Dressing, Egg, Cheese, Chicken Burger, Russian", "price": 75.00}, {"name": "Chips, Secret Dressing, Egg, Cheese, Boneless Rib, Russian", "price": 85.00}],
+        "Kotas": [
+            {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Chicken Burger", "price": 50.00},
+            {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Russian", "price": 60.00},
+            {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Beef Burger, Bacon", "price": 70.00},
+            {"name": "Chips, Secret Dressing, Jalapeño, Cheese, Egg, Chicken Burger, Russian", "price": 75.00}
+        ],
+        "Slices": [
+            {"name": "Chips, Secret Dressing, Egg, Cheese, Chicken Burger", "price": 50.00},
+            {"name": "Chips, Secret Dressing, Egg, Cheese, Beef Burger, Bacon", "price": 70.00},
+            {"name": "Chips, Secret Dressing, Egg, Cheese, Chicken Burger, Russian", "price": 75.00},
+            {"name": "Chips, Secret Dressing, Egg, Cheese, Boneless Rib, Russian", "price": 85.00}
+        ],
         "Babalazi Chips": [
             {"name": "Small Chips, Chakalaka, 1x Russian", "price": 50.00},
             {"name": "Medium Chips, Chakalaka, 2x Russian", "price": 95.00},
             {"name": "Large Chips, Chakalaka, 4x Russian", "price": 135.00},
-            {"name": "Chicken Small Chips + Quarter Chicken + Chakalaka", "price": 70.00},
-            {"name": "Chicken Small Chips + Quarter Chicken + Full Russian + Chakalaka", "price": 90.00},
-            {"name": "Chicken Medium Chips + Half Chicken + Chakalaka", "price": 90.00},
-            {"name": "Chicken Medium Chips + Half Chicken + 2x Russian + Chakalaka", "price": 130.00},
-            {"name": "Chicken Large Chips + Full Chicken + Chakalaka", "price": 160.00},
-            {"name": "Chicken Large Chips + Full Chicken + 4x Russian + Chakalaka", "price": 250.00}
+            {"name": "Small Chips + Quarter Chicken + Chakalaka", "price": 70.00},
+            {"name": "Small Chips + Quarter Chicken + Full Russian + Chakalaka", "price": 90.00},
+            {"name": "Medium Chips + Half Chicken + Chakalaka", "price": 90.00},
+            {"name": "Medium Chips + Half Chicken + 2x Russian + Chakalaka", "price": 130.00},
+            {"name": "Large Chips + Full Chicken + Chakalaka", "price": 160.00},
+            {"name": "Large Chips + Full Chicken + 4x Russian + Chakalaka", "price": 250.00}
         ]
     },
     "010 Cafe Menu": {
-        "Kotas": [{"name": "Egg, Cheese, Polony, Special", "price": 30.00}, {"name": "Egg, Cheese, Vienna, Polony, Special", "price": 39.00}, {"name": "Egg, Cheese, Russian, Polony, Special", "price": 50.00}, {"name": "Egg, Cheese, Vienna, Chicken Burger, Polony, Special", "price": 52.00}, {"name": "Egg, Cheese, Russian, Chicken Burger, Polony, Special", "price": 60.00}, {"name": "Egg, Cheese, Russian, Chicken Burger, Vienna, Polony, Special", "price": 65.00}, {"name": "Egg, Cheese, Russian, Beef Burger, Vienna, Polony, Special", "price": 78.00}],
-        "Rib Kotas": [{"name": "Egg, Cheese, Boneless Rib", "price": 60.00}, {"name": "Egg, Cheese, Boneless Rib, Chicken Burger", "price": 70.00}, {"name": "Egg, Cheese, Boneless Rib, Bacon", "price": 75.00}, {"name": "Egg, Cheese, Boneless Rib, Chicken Burger, Bacon", "price": 90.00}, {"name": "Egg, Cheese, Boneless Rib, Chicken Burger, Russian", "price": 115.00}],
-        "Kream Dala Kream": [{"name": "Slices Topped with Cheese/Beef, Chips, Cheese, Special, Bacon and Beef", "price": 75.00}, {"name": "Slices Topped with Cheese/Beef, Pieces, Chips, Cheese, Special, Egg, Russian and Beef", "price": 65.00}],
-        "Burgers": [{"name": "Chicken Burger with Chips (Lettuce, Tomato, Cheese, Egg, Chicken Patty)", "price": 50.00}, {"name": "Beef Burger (Lettuce, Tomato, Cheese, Egg, Beef Patty)", "price": 65.00}, {"name": "Boneless Rib Burger (Lettuce, Tomato, Cheese, Egg, Boneless Rib Patty)", "price": 75.00}],
-        "Dagwoods": [{"name": "Boring Dagwood (Lettuce, Tomato, Egg, 2x Beef, 2x Cheese)", "price": 65.00}, {"name": "Proper Dagwood (Lettuce, Tomato, Egg, Cheese, Boneless Rib, Chicken Burger, Russian)", "price": 115.00}],
+        "Kotas": [
+            {"name": "Egg, Cheese, Polony, Special", "price": 30.00},
+            {"name": "Egg, Cheese, Vienna, Polony, Special", "price": 39.00},
+            {"name": "Egg, Cheese, Russian, Polony, Special", "price": 50.00},
+            {"name": "Egg, Cheese, Vienna, Chicken Burger, Polony, Special", "price": 52.00},
+            {"name": "Egg, Cheese, Russian, Chicken Burger, Polony, Special", "price": 60.00},
+            {"name": "Egg, Cheese, Russian, Chicken Burger, Vienna, Polony, Special", "price": 65.00},
+            {"name": "Egg, Cheese, Russian, Beef Burger, Vienna, Polony, Special", "price": 78.00}
+        ],
+        "Rib Kotas": [
+            {"name": "Egg, Cheese, Boneless Rib", "price": 60.00},
+            {"name": "Egg, Cheese, Boneless Rib, Chicken Burger", "price": 70.00},
+            {"name": "Egg, Cheese, Boneless Rib, Bacon", "price": 75.00},
+            {"name": "Egg, Cheese, Boneless Rib, Chicken Burger, Bacon", "price": 90.00},
+            {"name": "Egg, Cheese, Boneless Rib, Chicken Burger, Russian", "price": 115.00}
+        ],
+        "Kream Dala Kream": [
+            {"name": "Slices Topped with Cheese/Beef Burger, Chips, Cheese, Special, Bacon and Beef", "price": 75.00},
+            {"name": "Slices Topped with Cheese/Beef Burger, Pieces, Chips, Cheese, Special, Egg, Russian and Beef", "price": 65.00}
+        ],
+        "Burgers": [
+            {"name": "Chicken Burger with Chips (Lettuce, Tomato, Cheese, Egg, Chicken Patty)", "price": 50.00},
+            {"name": "Beef Burger (Lettuce, Tomato, Cheese, Egg, Beef Patty)", "price": 65.00},
+            {"name": "Boneless Rib Burger (Lettuce, Tomato, Cheese, Egg, Boneless Rib Patty)", "price": 75.00}
+        ],
+        "Dagwoods": [
+            {"name": "Boring Dagwood (Lettuce, Tomato, Egg, 2x Beef, 2x Cheese)", "price": 65.00},
+            {"name": "Proper Dagwood (Lettuce, Tomato, Egg, Cheese, Boneless Rib, Chicken Burger, Russian)", "price": 115.00}
+        ],
         "Slices": [
             {"name": "Egg, Cheese, Chicken Burger, Polony, Special", "price": 40.00},
             {"name": "Egg, Cheese, Russian, Polony, Special", "price": 50.00},
             {"name": "Egg, Cheese, Vienna, Chicken Burger, Polony, Special", "price": 52.00},
             {"name": "Egg, Cheese, Russian, Chicken Burger, Polony, Special", "price": 60.00},
             {"name": "Egg, Cheese, Russian, Chicken Burger, Vienna, Polony, Special", "price": 65.00},
-            {"name": "Egg, Cheese, Russian, Beef Burger, Vienna, Polony, Special", "price": 78.00},
-            {"name": "Chicken Feet", "price": 2.00},
-            {"name": "Gizzards", "price": 6.00}
+            {"name": "Egg, Cheese, Russian, Beef Burger, Vienna, Polony, Special", "price": 78.00}
         ]
     },
-    "Weighed Meat": [{"name": "Heart"}, {"name": "Liver"}, {"name": "Kidneys"}, {"name": "Short Ribs"}, {"name": "Steak"}, {"name": "Wors"}],
-    "Sides Menu": [{"name": "Small Pap", "price": 10.00}, {"name": "Medium Pap", "price": 20.00}, {"name": "Large Pap", "price": 30.00}, {"name": "Chakalaka Mild", "price": 15.00}, {"name": "Chakalaka Hot", "price": 15.00}, {"name": "Salad Mix (Onion + Green Pepper)", "price": 10.00}, {"name": "Extra Chakalaka (small bottle)", "price": 15.00}, {"name": "Salad Mix (extra)", "price": 20.00}, {"name": "Chicken Feet", "price": 2.00}, {"name": "Gizzards", "price": 6.00}],
-    "Drinks Menu": [{"name": "330ml Coke (or other available flavours)", "price": 12.00}, {"name": "440ml Coke (or other available flavours)", "price": 15.00}, {"name": "500ml Bon Aqua Still Water", "price": 10.00}, {"name": "330ml Cappy Juice", "price": 15.00}, {"name": "2L Coke", "price": 21.00}],
-    "Specials": [{"name": "Chicken 1/4 Chicken Plate + 440ml Coke", "price": 70.00}, {"name": "Chicken 1/2 Chicken Plate + (2x 440ml Coke)", "price": 100.00}, {"name": "Chicken Pensioner’s Special (1/4 Chicken Plate + 440ml Coke)", "price": 60.00}]
+    "Weighed Meat": [
+        {"name": "Heart"},
+        {"name": "Liver"},
+        {"name": "Kidneys"},
+        {"name": "Short Ribs"},
+        {"name": "Steak"},
+        {"name": "Wors"}
+    ],
+    "Sides Menu": [
+        {"name": "Small Pap", "price": 10.00},
+        {"name": "Medium Pap", "price": 20.00},
+        {"name": "Large Pap", "price": 30.00},
+        {"name": "Chakalaka Mild", "price": 15.00},
+        {"name": "Chakalaka Hot", "price": 15.00},
+        {"name": "Salad Mix (Onion + Green Pepper)", "price": 10.00},
+        {"name": "Extra Chakalaka (small bottle)", "price": 15.00},
+        {"name": "Salad Mix (extra)", "price": 20.00},
+        {"name": "Chicken Feet", "price": 2.00},
+        {"name": "Chicken Gizzards", "price": 6.00}
+    ],
+    "Drinks Menu": [
+        {"name": "330ml Coke (or other available flavours)", "price": 12.00},
+        {"name": "440ml Coke (or other available flavours)", "price": 15.00},
+        {"name": "500ml Bon Aqua Still Water", "price": 10.00},
+        {"name": "330ml Cappy Juice", "price": 15.00},
+        {"name": "2L Coke", "price": 21.00}
+    ],
+    "Specials": [
+        {"name": "1/4 Chicken Plate + 440ml Coke", "price": 70.00},
+        {"name": "1/2 Chicken Plate + (2x 440ml Coke)", "price": 100.00},
+        {"name": "Pensioner’s Special (1/4 Chicken Plate + 440ml Coke)", "price": 60.00}
+    ]
 }
 
 # Global variables
@@ -89,7 +163,7 @@ def generate_order_number():
     return order_number
 
 # Send Telegram notification
-def send_telegram_notification(order_number, cart, total, customer_details, delivery_address=None):
+def send_telegram_notification(order_number, cart, total, customer_details, delivery_address=None, payment_method=None):
     bot_token = "7984570465:AAEOci3s55Pg07REgZR74W-8SrtqsG4GLPE"
     chat_id = "-1002522817592"
     message = f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n"
@@ -101,7 +175,8 @@ def send_telegram_notification(order_number, cart, total, customer_details, deli
     if delivery_address:
         delivery_fee = total - sum(item['total'] for item in cart if 'total' in item)
         message += f"\nDelivery Address: {delivery_address}\nDelivery Fee: R{delivery_fee:.2f}\n"
-    message += f"\nTotal: R{total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
+    message += f"\nPayment Method: {payment_method}\n"
+    message += f"Total: R{total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     params = {"chat_id": chat_id, "text": message}
     try:
@@ -164,6 +239,22 @@ def add_kream_dala_kream(item, quantity, burger_type):
     cart_ref.set({"name": flavored_name, "amount": item["price"], "quantity": quantity, "total": total})
     return f"Added {quantity} x {flavored_name} to cart! 🍔"
 
+# Remove item from cart
+@app.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    try:
+        item_name = request.form.get('name')
+        if not item_name:
+            return jsonify({"error": "Item name is required"}), 400
+        cart_items = [doc for doc in db.collection('carts').where('name', '==', item_name).get()]
+        if not cart_items:
+            return jsonify({"error": "Item not found in cart"}), 404
+        for doc in cart_items:
+            doc.reference.delete()
+        return jsonify({"message": f"Removed {item_name} from cart!"}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to remove item: {str(e)}"}), 500
+
 # Routes
 @app.route('/')
 def home():
@@ -176,6 +267,34 @@ def store_location():
 @app.route('/menus')
 def menus():
     return render_template('menus.html', menu=menu)
+
+@app.route('/chicken_menu')
+def chicken_menu():
+    return render_template('chicken_menu.html', menu=menu["Chicken Menu"])
+
+@app.route('/kota_menu')
+def kota_menu():
+    return render_template('kota_menu.html', menu=menu["Kota Menu"])
+
+@app.route('/010_cafe_menu')
+def cafe_menu():
+    return render_template('010_cafe_menu.html', menu=menu["010 Cafe Menu"])
+
+@app.route('/weighed_meat')
+def weighed_meat():
+    return render_template('weighed_meat.html', menu=menu["Weighed Meat"])
+
+@app.route('/sides_menu')
+def sides_menu():
+    return render_template('sides_menu.html', menu=menu["Sides Menu"])
+
+@app.route('/drinks_menu')
+def drinks_menu():
+    return render_template('drinks_menu.html', menu=menu["Drinks Menu"])
+
+@app.route('/specials')
+def specials():
+    return render_template('specials.html', menu=menu["Specials"])
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -216,11 +335,8 @@ def add_to_cart():
         if quantity <= 0 and amount <= 0:
             return jsonify({"error": "Quantity or amount must be positive"}), 400
 
-        if category_name == "Chicken Menu" and ("Meals" in subcat or "Plates" in subcat or "Combos" in subcat):
-            message = add_fixed_price_item(item, quantity, flavor)
-        elif category_name == "Kota Menu" and subcat == "Babalazi Chips" and "Russian" not in item_name:
-            message = add_fixed_price_item(item, quantity, flavor)
-        elif category_name in ["010 Cafe Menu", "Sides Menu"] and item_name in ["Chicken Feet", "Gizzards"]:
+        # Apply flavor to all relevant categories
+        if category_name in ["Chicken Menu", "Specials"] or (category_name == "Kota Menu" and subcat == "Babalazi Chips" and "Chakalaka" in item_name and item_name not in ["Small Chips, Chakalaka, 1x Russian", "Medium Chips, Chakalaka, 2x Russian", "Large Chips, Chakalaka, 4x Russian"]) or (category_name == "Sides Menu" and item_name in ["Chicken Feet", "Chicken Gizzards"]):
             message = add_fixed_price_item(item, quantity, flavor)
         elif category_name == "010 Cafe Menu" and subcat == "Kream Dala Kream":
             message = add_kream_dala_kream(item, quantity, burger_type)
@@ -231,7 +347,7 @@ def add_to_cart():
         else:
             message = add_fixed_price_item_no_flavor(item, quantity)
 
-        return jsonify({"message": message, "stay": True}), 200
+        return jsonify({"message": message}), 200
     except ValueError as ve:
         return jsonify({"error": f"Invalid input: {str(ve)}"}), 400
     except Exception as e:
@@ -265,10 +381,17 @@ def checkout():
             surname = request.form.get('surname', '').strip() or 'N/A'
             address = request.form.get('address', '').strip()
             delivery = request.form.get('delivery') == 'true'
+            payment_method = request.form.get('payment_method')
             remember = bool(request.form.get('remember'))
 
             if not name or not phone or not email:
                 return jsonify({"error": "Name, phone, and email are required"}), 400
+            if not payment_method:
+                return jsonify({"error": "Payment method is required"}), 400
+            if payment_method not in ["Cash on delivery", "Cash on collection", "Card on delivery", "Card on collection", "In-App"]:
+                return jsonify({"error": "Invalid payment method"}), 400
+            if payment_method == "In-App":
+                return jsonify({"error": "In-App payment is coming soon and not available yet"}), 400
 
             if remember:
                 remembered_customer.update({"name": name, "surname": surname, "phone": phone, "email": email, "remembered": True})
@@ -287,15 +410,15 @@ def checkout():
                 delivery_fee = distance_km * 6.00
                 final_total = base_total + delivery_fee
                 order_number = generate_order_number()
-                send_telegram_notification(order_number, cart_items, final_total, customer_details, address)
-                process_payment(final_total, "Payfast", order_number)
+                send_telegram_notification(order_number, cart_items, final_total, customer_details, address, payment_method)
+                process_payment(final_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
                 return jsonify({"message": f"Delivery order {order_number} placed! Total: R{final_total:.2f} (Delivery Fee: R{delivery_fee:.2f}, {distance_km:.2f} km)", "stay": True}), 200
             else:
                 order_number = generate_order_number()
-                send_telegram_notification(order_number, cart_items, base_total, customer_details)
-                process_payment(base_total, "Payfast", order_number)
+                send_telegram_notification(order_number, cart_items, base_total, customer_details, None, payment_method)
+                process_payment(base_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
                 return jsonify({"message": f"Collection order {order_number} placed! Total: R{base_total:.2f}", "stay": True}), 200

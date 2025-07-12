@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}010 Cafe Menu - 010 Café 🌟🥳{% endblock %}
+{% block content %}
+    <p><a href="{{ url_for('menus') }}">Back ⬅️🍴</a></p>
+    <h1>010 Cafe Menu ☕🎉</h1>
+    {% for subcat, items in menu.items() %}
+        <h2>{{ subcat }} 🌟</h2>
+        <ul>
+            {% for item in items %}
+                <li class="menu-item">
+                    <div class="description">
+                        {{ item.name }} 🍽️😋 - R{{ item.price|floatformat(2) }} 💰
+                    </div>
+                    <form action="{{ url_for('add_to_cart') }}" method="POST">
+                        <input type="hidden" name="name" value="{{ item.name }}">
+                        <input type="number" name="quantity" value="1" min="1">
+                        {% if subcat == "Kream Dala Kream" %}
+                            <select name="burger_type">
+                                <option value="Cheese" selected>Cheese Burger 🧀</option>
+                                <option value="Beef">Beef Burger 🥩</option>
+                            </select>
+                        {% endif %}
+                        <button type="submit">Add to Cart 🛒🥳</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    <p><a href="{{ url_for('menus') }}">Back to Menus ⬅️🍴</a> | <a href="{{ url_for('view_cart') }}">View Cart 🛒</a></p>
+{% endblock %}
