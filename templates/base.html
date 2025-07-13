@@ -47,7 +47,7 @@
         .hamburger {
             display: none;
             font-size: 24px;
-            color: #fff;
+            color: #000000; /* Black hamburger menu */
             background: none;
             border: none;
             cursor: pointer;
@@ -64,22 +64,9 @@
             text-align: center;
             margin-bottom: 15px;
         }
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f9f1e7;
-            border-left: 4px solid #26a69a;
-            border-radius: 4px;
-        }
-        .menu-item .description {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
         form {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             align-items: center;
         }
@@ -89,10 +76,11 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 16px;
-            width: 4em;
+            width: 100%;
+            max-width: 300px;
         }
         select {
-            width: 150px;
+            width: 100%;
             padding: 10px;
         }
         textarea {
@@ -136,18 +124,6 @@
         footer a {
             color: #d4e157;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
         @media (max-width: 600px) {
             .hamburger {
                 display: block;
@@ -180,29 +156,13 @@
             .content {
                 padding: 10px;
             }
-            .menu-item {
-                flex-direction: column;
-                text-align: left;
-                padding: 10px;
-            }
-            .menu-item form {
-                margin-top: 10px;
+            form {
                 width: 100%;
-                flex-direction: column;
-                gap: 8px;
             }
-            input[type="number"], select, button {
+            input[type="number"], select, input[type="text"], input[type="email"], textarea, button {
                 font-size: 14px;
                 padding: 8px;
                 width: 100%;
-                max-width: 100%;
-            }
-            select {
-                width: 100%;
-            }
-            button {
-                padding: 12px;
-                font-size: 16px;
             }
         }
     </style>
@@ -241,26 +201,6 @@
             const navMenu = document.querySelector('.nav-menu');
             hamburger.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
-            });
-            const forms = document.querySelectorAll('form[action="/add_to_cart"]');
-            forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const formData = new FormData(this);
-                    fetch('/add_to_cart', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            alert(data.message);
-                        } else if (data.error) {
-                            alert('Error: ' + data.error);
-                        }
-                    })
-                    .catch(error => alert('Error submitting form: ' + error));
-                });
             });
         });
     </script>

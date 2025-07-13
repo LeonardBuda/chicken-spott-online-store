@@ -2,18 +2,35 @@
 {% block title %}Track Your Order - 010 Café{% endblock %}
 {% block content %}
     <h1>Track Your Order 📦🚚</h1>
-
-    <div style="text-align: center; padding: 20px;">
-        <p>On the Way... 🚚📡</p>
-        <p>Please help us find your order! 🙏 Enter your order number and/or cellphone number, and we’ll get back to you soon! ⏰📞</p>
-        <form action="/track_order" method="POST">
-            <label for="order_number">Order Number 🌟:</label>
-            <input type="text" name="order_number" placeholder="e.g., #12345" required><br><br>
-            <label for="phone">Cellphone Number 📱:</label>
-            <input type="tel" name="phone" placeholder="e.g., 0110701646" required><br><br>
-            <button type="submit">Submit Request 🚀</button>
-        </form>
-    </div>
-
-    <a href="/">Back ⬅️</a>
+    <p>On the Way... 🚚📡</p>
+    <p>Please help us find your order! 🙏 Enter your order number and/or cellphone number, and we’ll get back to you soon! ⏰📞</p>
+    <form method="POST" id="trackForm">
+        <label for="order_number">Order Number 🌟:</label>
+        <input type="text" name="order_number" id="order_number" required>
+        <label for="phone">Cellphone Number 📱:</label>
+        <input type="text" name="phone" id="phone" required>
+        <button type="submit">Submit Request 🚀</button>
+    </form>
+    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('trackForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                fetch('/track_order', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => alert('Error submitting tracking request: ' + error));
+            });
+        });
+    </script>
 {% endblock %}

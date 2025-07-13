@@ -163,20 +163,9 @@ def generate_order_number():
     return order_number
 
 # Send Telegram notification
-def send_telegram_notification(order_number, cart, total, customer_details, delivery_address=None, payment_method=None):
+def send_telegram_notification(message):
     bot_token = "7984570465:AAEOci3s55Pg07REgZR74W-8SrtqsG4GLPE"
     chat_id = "-1002522817592"
-    message = f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n"
-    for item in cart:
-        if 'quantity' in item:
-            message += f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}\n"
-        else:
-            message += f"{item['name']} - R{item['amount']:.2f}\n"
-    if delivery_address:
-        delivery_fee = total - sum(item['total'] for item in cart if 'total' in item)
-        message += f"\nDelivery Address: {delivery_address}\nDelivery Fee: R{delivery_fee:.2f}\n"
-    message += f"\nPayment Method: {payment_method}\n"
-    message += f"Total: R{total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     params = {"chat_id": chat_id, "text": message}
     try:
@@ -410,14 +399,14 @@ def checkout():
                 delivery_fee = distance_km * 6.00
                 final_total = base_total + delivery_fee
                 order_number = generate_order_number()
-                send_telegram_notification(order_number, cart_items, final_total, customer_details, address, payment_method)
+                send_telegram_notification(f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n" + "\n".join(f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}" if 'quantity' in item else f"{item['name']} - R{item['amount']:.2f}" for item in cart_items) + f"\nDelivery Address: {address}\nDelivery Fee: R{delivery_fee:.2f}\nPayment Method: {payment_method}\nTotal: R{final_total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰")
                 process_payment(final_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
                 return jsonify({"message": f"Delivery order {order_number} placed! Total: R{final_total:.2f} (Delivery Fee: R{delivery_fee:.2f}, {distance_km:.2f} km)", "stay": True}), 200
             else:
                 order_number = generate_order_number()
-                send_telegram_notification(order_number, cart_items, base_total, customer_details, None, payment_method)
+                send_telegram_notification(f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n" + "\n".join(f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}" if 'quantity' in item else f"{item['name']} - R{item['amount']:.2f}" for item in cart_items) + f"\nPayment Method: {payment_method}\nTotal: R{base_total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰")
                 process_payment(base_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
@@ -446,13 +435,29 @@ def rate_us():
             comment = request.form.get('comment', '')
             if not rating:
                 return jsonify({"error": "Rating is required"}), 400
-            db.collection('ratings').document().set({"rating": int(rating), "comment": comment, "timestamp": time.time()})
-            return jsonify({"message": "Thank you for your rating!"}), 200
+            rating_int = int(rating)
+            if rating_int < 1 or rating_int > 5:
+                return jsonify({"error": "Rating must be between 1 and 5"}), 400
+            db.collection('ratings').document().set({"rating": rating_int, "comment": comment, "timestamp": time.time()})
+            
+            # Calculate average rating
+            ratings = [doc.to_dict()["rating"] for doc in db.collection('ratings').get()]
+            average_rating = sum(ratings) / len(ratings) if ratings else 0.0
+            
+            # Send Telegram notification
+            message = f"New Rating 📬\nRating: {rating_int} 🌟\nComment: {comment}\nAverage Rating: {average_rating:.2f} ⭐\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
+            send_telegram_notification(message)
+            return jsonify({"message": f"Thank you for your rating! Average Rating: {average_rating:.2f} ⭐", "average_rating": average_rating}), 200
         except ValueError as ve:
             return jsonify({"error": f"Invalid rating: {str(ve)}"}), 400
         except Exception as e:
             return jsonify({"error": f"Rating submission failed: {str(e)}"}), 500
-    return render_template('rate_us.html')
+    try:
+        ratings = [doc.to_dict()["rating"] for doc in db.collection('ratings').get()]
+        average_rating = sum(ratings) / len(ratings) if ratings else 0.0
+        return render_template('rate_us.html', average_rating=average_rating)
+    except Exception as e:
+        return render_template('rate_us.html', average_rating=0.0)
 
 @app.route('/gallery')
 def gallery():
@@ -468,14 +473,8 @@ def contact():
             if not name or not email or not message:
                 return jsonify({"error": "All fields are required"}), 400
             db.collection('contacts').document().set({"name": name, "email": email, "message": message, "timestamp": time.time()})
-            bot_token = "7984570465:AAEOci3s55Pg07REgZR74W-8SrtqsG4GLPE"
-            chat_id = "-1002522817592"
-            notification_message = f"New Contact Message 📬\nName: {name} 🌟\nEmail: {email} ✉️\nMessage: {message} 📝\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            params = {"chat_id": chat_id, "text": notification_message}
-            response = requests.post(url, data=params, timeout=10)
-            if response.status_code != 200 or not response.json().get("ok"):
-                print(f"Failed to send contact notification: {response.text} ⚠️")
+            message = f"New Contact Message 📬\nName: {name} 🌟\nEmail: {email} ✉️\nMessage: {message} 📝\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
+            send_telegram_notification(message)
             return jsonify({"message": "Message sent successfully! 🚀"}), 200
         except Exception as e:
             return jsonify({"error": f"Contact submission failed: {str(e)}"}), 500
@@ -490,14 +489,8 @@ def track_order():
             if not order_number or not phone:
                 return jsonify({"error": "Order number and phone are required"}), 400
             db.collection('tracking_requests').document().set({"order_number": order_number, "phone": phone, "timestamp": time.time()})
-            bot_token = "7984570465:AAEOci3s55Pg07REgZR74W-8SrtqsG4GLPE"
-            chat_id = "-1002522817592"
-            notification_message = f"New Order Tracking Request 📬\nOrder Number: {order_number} 🌟\nPhone: {phone} 📱\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰\nPlease follow up! 🚨"
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            params = {"chat_id": chat_id, "text": notification_message}
-            response = requests.post(url, data=params, timeout=10)
-            if response.status_code != 200 or not response.json().get("ok"):
-                print(f"Failed to send tracking request notification: {response.text} ⚠️")
+            message = f"New Order Tracking Request 📬\nOrder Number: {order_number} 🌟\nPhone: {phone} 📱\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰\nPlease follow up! 🚨"
+            send_telegram_notification(message)
             return jsonify({"message": "Request submitted! We’ll get back to you soon. 🚀"}), 200
         except Exception as e:
             return jsonify({"error": f"Tracking request failed: {str(e)}"}), 500

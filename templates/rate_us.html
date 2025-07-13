@@ -1,20 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Rate Us - 010 Café{% endblock %}
 {% block content %}
-    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
     <h1>Rate Us 🌟</h1>
-    <form method="POST" action="{{ url_for('rate_us') }}">
-        <label for="rating">Rating (1-5)*:</label><br>
-        <select id="rating" name="rating" required>
+    <p>Average Rating: {{ average_rating|floatformat(2) }} ⭐ (based on all ratings)</p>
+    <form method="POST" id="ratingForm">
+        <label for="rating">Rating (1-5)*:</label>
+        <select name="rating" id="rating" required>
+            <option value="" disabled selected>Select rating</option>
             <option value="5">5 - Excellent</option>
             <option value="4">4 - Very Good</option>
             <option value="3">3 - Good</option>
             <option value="2">2 - Fair</option>
             <option value="1">1 - Poor</option>
-        </select><br><br>
-        <label for="comment">Comment (optional):</label><br>
-        <textarea id="comment" name="comment"></textarea><br><br>
+        </select>
+        <label for="comment">Comment (optional):</label>
+        <textarea name="comment" id="comment" placeholder="Share your thoughts..."></textarea>
         <button type="submit">Submit Rating 🚀</button>
     </form>
     <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('ratingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                fetch('/rate_us', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert(data.message);
+                        location.reload(); // Refresh to update average rating
+                    }
+                })
+                .catch(error => alert('Error submitting rating: ' + error));
+            });
+        });
+    </script>
 {% endblock %}

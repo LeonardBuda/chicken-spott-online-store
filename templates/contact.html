@@ -1,15 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Contact - 010 Café{% endblock %}
 {% block content %}
-    <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
     <h1>Contact Us 📞✨</h1>
-    <div class="contact-form">
-        <form method="POST" action="{{ url_for('contact') }}">
-            <input type="text" name="name" placeholder="Name* 🌟" required>
-            <input type="email" name="email" placeholder="Email* ✉️" required>
-            <textarea name="message" placeholder="Message* 📝" required></textarea>
-            <button type="submit">Send Message 🚀</button>
-        </form>
-    </div>
+    <form method="POST" id="contactForm">
+        <label for="name">Name*:</label>
+        <input type="text" name="name" id="name" required>
+        <label for="email">Email*:</label>
+        <input type="email" name="email" id="email" required>
+        <label for="message">Message*:</label>
+        <textarea name="message" id="message" required placeholder="How can we assist you?"></textarea>
+        <button type="submit">Send Message 🚀</button>
+    </form>
     <p><a href="{{ url_for('home') }}">Back ⬅️</a></p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                fetch('/contact', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => alert('Error submitting contact form: ' + error));
+            });
+        });
+    </script>
 {% endblock %}
