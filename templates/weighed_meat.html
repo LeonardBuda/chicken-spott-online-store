@@ -11,9 +11,8 @@
                 </div>
                 <form action="{{ url_for('add_to_cart') }}" method="POST">
                     <input type="hidden" name="name" value="{{ item.name }}">
-                    <input type="number" name="amount" placeholder="Amount" min="0" step="0.01" required>
-                    <select name="flavor">
-                        <option value="All-In-One" selected>All-In-One 🟡</option>
+                    <input type="number" name="amount" placeholder="Amount R" min="0" step="0.01" required>
+                    <select name="flavor" required>
                         <option value="Hot">Hot 🔴</option>
                         <option value="Mild">Mild 🟢</option>
                         <option value="Barbecue">Barbecue 🟤</option>

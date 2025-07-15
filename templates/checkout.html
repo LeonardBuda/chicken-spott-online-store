@@ -18,24 +18,28 @@
     </div>
     <div>
         <h2>Customer Details 📝</h2>
-        <form action="{{ url_for('checkout') }}" method="POST">
-            <label>Name*:</label>
-            <input type="text" name="name" placeholder="Name" value="{{ remembered_customer.get('name', '') }}" required>
-            <label>Surname:</label>
-            <input type="text" name="surname" placeholder="Surname" value="{{ remembered_customer.get('surname', '') }}">
-            <label>Phone*:</label>
-            <input type="text" name="phone" placeholder="Phone" value="{{ remembered_customer.get('phone', '') }}" required>
-            <label>Email*:</label>
-            <input type="email" name="email" placeholder="Email" value="{{ remembered_customer.get('email', '') }}" required>
-            <label>Special Note:</label>
-            <textarea name="special_note" placeholder="e.g., No cheese"></textarea>
+        <form action="{{ url_for('checkout') }}" method="POST" class="checkout-form">
+            <label for="name">Name*:</label>
+            <input type="text" id="name" name="name" placeholder="Name" value="{{ remembered_customer.get('name', '') }}" required>
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" placeholder="Surname" value="{{ remembered_customer.get('surname', '') }}">
+            <label for="phone">Phone*:</label>
+            <input type="text" id="phone" name="phone" placeholder="Phone" value="{{ remembered_customer.get('phone', '') }}" required>
+            <label for="email">Email*:</label>
+            <input type="email" id="email" name="email" placeholder="Email" value="{{ remembered_customer.get('email', '') }}" required>
+            <label for="special_note">Special Note:</label>
+            <textarea id="special_note" name="special_note" placeholder="e.g., No cheese"></textarea>
             <label>Order Type:</label>
-            <input type="radio" name="delivery" value="false" checked> Collection 📦
-            <input type="radio" name="delivery" value="true"> Delivery 🚚
-            <label>Delivery Address:</label>
-            <input type="text" name="address" placeholder="Delivery Address" {% if not remembered_customer.get('remembered') %}style="display:none;"{% endif %}>
-            <label>Payment Method*:</label>
-            <select name="payment_method" required>
+            <div>
+                <input type="radio" id="collection" name="delivery" value="false" checked>
+                <label for="collection">Collection 📦</label>
+                <input type="radio" id="delivery" name="delivery" value="true">
+                <label for="delivery">Delivery 🚚</label>
+            </div>
+            <label for="address">Delivery Address:</label>
+            <input type="text" id="address" name="address" placeholder="Delivery Address" {% if not remembered_customer.get('remembered') %}style="display:none;"{% endif %}>
+            <label for="payment_method">Payment Method*:</label>
+            <select id="payment_method" name="payment_method" required>
                 <option value="" disabled selected>Select payment method</option>
                 <option value="Cash on delivery">Cash on delivery</option>
                 <option value="Cash on collection">Cash on collection</option>

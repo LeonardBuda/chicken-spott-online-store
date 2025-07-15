@@ -9,12 +9,14 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5e8c7;
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #4a2c2a;
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
         nav {
             background-color: #26a69a;
@@ -47,58 +49,61 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background: #fff;
+            background: transparent;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
             color: #000;
             text-align: center;
             margin-bottom: 15px;
+            font-size: 1.8em;
         }
         .menu-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             margin-bottom: 15px;
             padding: 10px;
-            background: #f9f1e7;
+            background: rgba(249, 241, 231, 0.8);
             border-left: 4px solid #26a69a;
             border-radius: 4px;
         }
         .menu-item .description {
-            flex-grow: 1;
-            margin-right: 10px;
+            margin-bottom: 10px;
         }
         form {
             display: flex;
-            gap: 5px;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
         }
-        input[type="number"], select, input[type="text"], input[type="email"], textarea {
-            padding: 5px 10px;
-            margin-right: 5px;
+        input[type="number"], input[type="text"], input[type="email"], select, textarea {
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 14px;
-            width: 3em; /* 3-digit width for Qty */
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
         }
-        select {
-            width: 150px; /* Wide enough for "All-In-One 🟡" */
+        select[name="flavor"] {
+            width: 100px;
+        }
+        input[name="amount"] {
+            width: 80px;
         }
         textarea {
-            width: 100%;
-            max-width: 300px;
             min-height: 100px;
+            resize: vertical;
         }
         button {
             background-color: #8d6e63;
             color: #fff;
             border: none;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 4px;
+            font-size: 1em;
             transition: background-color 0.3s;
+            width: 100%;
         }
         button:hover {
             background-color: #6d4c41;
@@ -113,7 +118,6 @@
         }
         footer {
             flex-shrink: 0;
-            margin-top: auto;
             padding: 10px 0;
             background-color: #4a2c2a;
             color: #fff;
@@ -129,11 +133,14 @@
             border-radius: 4px;
             margin: 10px 0;
         }
-        .contact-form {
+        .contact-form, .checkout-form {
             display: flex;
             flex-direction: column;
-            align-items: center;
             gap: 10px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         @media (max-width: 600px) {
             nav ul {
@@ -144,12 +151,20 @@
                 margin: 10px;
                 padding: 10px;
             }
-            .menu-item {
-                flex-direction: column;
-                text-align: left;
+            h1, h2 {
+                font-size: 1.5em;
             }
-            .menu-item form {
-                margin-top: 5px;
+            .menu-item {
+                padding: 8px;
+            }
+            input, select, textarea, button {
+                font-size: 0.9em;
+                padding: 6px;
+            }
+            select[name="flavor"] {
+                width: 100%;
+            }
+            input[name="amount"] {
                 width: 100%;
             }
         }
@@ -184,7 +199,6 @@
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle all form submissions
             const forms = document.querySelectorAll('form[action="/add_to_cart"], form[action="/remove_from_cart"], form[action="/checkout"], form[action="/contact"], form[action="/track_order"], form[action="/rate_us"]');
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
@@ -200,7 +214,7 @@
                         if (data.message) {
                             alert(data.message);
                             if (action === '/remove_from_cart') {
-                                location.reload(); // Auto-refresh after removing item
+                                location.reload();
                             }
                         } else if (data.error) {
                             alert('Error: ' + data.error);
