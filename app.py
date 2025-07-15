@@ -117,9 +117,9 @@ menu = {
         ]
     },
     "Weighed Meat": [
-        {"name": "Heart"},
-        {"name": "Liver"},
-        {"name": "Kidneys"},
+        {"name": "Ox Heart"},
+        {"name": "Ox Liver"},
+        {"name": "Ox Kidneys"},
         {"name": "Short Ribs"},
         {"name": "Steak"},
         {"name": "Wors"}
@@ -135,13 +135,6 @@ menu = {
         {"name": "Salad Mix (extra)", "price": 20.00},
         {"name": "Chicken Feet", "price": 2.00},
         {"name": "Chicken Gizzards", "price": 6.00}
-    ],
-    "Drinks Menu": [
-        {"name": "330ml Coke (or other available flavours)", "price": 12.00},
-        {"name": "440ml Coke (or other available flavours)", "price": 15.00},
-        {"name": "500ml Bon Aqua Still Water", "price": 10.00},
-        {"name": "330ml Cappy Juice", "price": 15.00},
-        {"name": "2L Coke", "price": 21.00}
     ],
     "Specials": [
         {"name": "1/4 Chicken Plate + 440ml Coke", "price": 70.00},
@@ -163,9 +156,21 @@ def generate_order_number():
     return order_number
 
 # Send Telegram notification
-def send_telegram_notification(message):
+def send_telegram_notification(order_number, cart_items, customer_details, final_total, delivery_fee=None, distance_km=None, payment_method=None, special_note=None):
     bot_token = "7984570465:AAEOci3s55Pg07REgZR74W-8SrtqsG4GLPE"
     chat_id = "-1002522817592"
+    message = f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n"
+    if special_note:
+        message += f"Special Note: {special_note}\n"
+    message += "\nOrder Details:\n"
+    for item in cart_items:
+        if 'quantity' in item:
+            message += f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}\n"
+        else:
+            message += f"{item['name']} - R{item['amount']:.2f}\n"
+    if delivery_fee is not None and distance_km is not None:
+        message += f"\nDelivery Address: {customer_details.get('address')}\nDelivery Fee: R{delivery_fee:.2f} ({distance_km:.2f} km @ R6/km)\n"
+    message += f"\nPayment Method: {payment_method}\nTotal: R{final_total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
     url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     params = {"chat_id": chat_id, "text": message}
     try:
@@ -215,10 +220,11 @@ def add_fixed_price_item_no_flavor(item, quantity):
     return f"Added {quantity} x {item['name']} to cart! 🍽️"
 
 # Add weighed item
-def add_weighed_item(item, amount):
+def add_weighed_item(item, amount, flavor):
+    flavored_name = f"{item['name']} ({flavor})" if flavor != "All-In-One" else item['name']
     cart_ref = db.collection('carts').document()
-    cart_ref.set({"name": item["name"], "amount": amount})
-    return f"Added {item['name']} worth R{amount:.2f} to cart! 🥩"
+    cart_ref.set({"name": flavored_name, "amount": amount})
+    return f"Added {flavored_name} worth R{amount:.2f} to cart! 🥩"
 
 # Add Kream Dala Kream item
 def add_kream_dala_kream(item, quantity, burger_type):
@@ -277,10 +283,6 @@ def weighed_meat():
 def sides_menu():
     return render_template('sides_menu.html', menu=menu["Sides Menu"])
 
-@app.route('/drinks_menu')
-def drinks_menu():
-    return render_template('drinks_menu.html', menu=menu["Drinks Menu"])
-
 @app.route('/specials')
 def specials():
     return render_template('specials.html', menu=menu["Specials"])
@@ -332,7 +334,7 @@ def add_to_cart():
         elif category_name == "Weighed Meat":
             if amount <= 0:
                 return jsonify({"error": "Amount must be positive"}), 400
-            message = add_weighed_item(item, amount)
+            message = add_weighed_item(item, amount, flavor)
         else:
             message = add_fixed_price_item_no_flavor(item, quantity)
 
@@ -371,6 +373,7 @@ def checkout():
             address = request.form.get('address', '').strip()
             delivery = request.form.get('delivery') == 'true'
             payment_method = request.form.get('payment_method')
+            special_note = request.form.get('special_note', '').strip()
             remember = bool(request.form.get('remember'))
 
             if not name or not phone or not email:
@@ -385,7 +388,7 @@ def checkout():
             if remember:
                 remembered_customer.update({"name": name, "surname": surname, "phone": phone, "email": email, "remembered": True})
 
-            customer_details = {"name": name, "surname": surname, "phone": phone, "email": email}
+            customer_details = {"name": name, "surname": surname, "phone": phone, "email": email, "address": address}
             cart_items = [doc.to_dict() for doc in db.collection('carts').get()]
             base_total = sum(item['total'] if 'total' in item else item['amount'] for item in cart_items)
 
@@ -399,14 +402,14 @@ def checkout():
                 delivery_fee = distance_km * 6.00
                 final_total = base_total + delivery_fee
                 order_number = generate_order_number()
-                send_telegram_notification(f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n" + "\n".join(f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}" if 'quantity' in item else f"{item['name']} - R{item['amount']:.2f}" for item in cart_items) + f"\nDelivery Address: {address}\nDelivery Fee: R{delivery_fee:.2f}\nPayment Method: {payment_method}\nTotal: R{final_total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰")
+                send_telegram_notification(order_number, cart_items, customer_details, final_total, delivery_fee, distance_km, payment_method, special_note)
                 process_payment(final_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
                 return jsonify({"message": f"Delivery order {order_number} placed! Total: R{final_total:.2f} (Delivery Fee: R{delivery_fee:.2f}, {distance_km:.2f} km)", "stay": True}), 200
             else:
                 order_number = generate_order_number()
-                send_telegram_notification(f"Order Number: {order_number}\n\nCustomer Details:\nName: {customer_details['name']}\nSurname: {customer_details.get('surname', 'N/A')}\nPhone: {customer_details['phone']}\nEmail: {customer_details['email']}\n\nOrder Details:\n" + "\n".join(f"{item['name']} - R{item['amount']:.2f} x {item['quantity']} = R{item['total']:.2f}" if 'quantity' in item else f"{item['name']} - R{item['amount']:.2f}" for item in cart_items) + f"\nPayment Method: {payment_method}\nTotal: R{base_total:.2f} 💸\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰")
+                send_telegram_notification(order_number, cart_items, customer_details, base_total, payment_method=payment_method, special_note=special_note)
                 process_payment(base_total, payment_method, order_number)
                 for doc in db.collection('carts').get():
                     doc.reference.delete()
@@ -446,8 +449,8 @@ def rate_us():
             
             # Send Telegram notification
             message = f"New Rating 📬\nRating: {rating_int} 🌟\nComment: {comment}\nAverage Rating: {average_rating:.2f} ⭐\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
-            send_telegram_notification(message)
-            return jsonify({"message": f"Thank you for your rating! Average Rating: {average_rating:.2f} ⭐", "average_rating": average_rating}), 200
+            send_telegram_notification(order_number=None, cart_items=[], customer_details={}, final_total=0, payment_method=None, special_note=message)
+            return jsonify({"message": f"Thank you for your rating! Average Rating: {average_rating:.2f} ⭐", "stay": True}), 200
         except ValueError as ve:
             return jsonify({"error": f"Invalid rating: {str(ve)}"}), 400
         except Exception as e:
@@ -473,9 +476,9 @@ def contact():
             if not name or not email or not message:
                 return jsonify({"error": "All fields are required"}), 400
             db.collection('contacts').document().set({"name": name, "email": email, "message": message, "timestamp": time.time()})
-            message = f"New Contact Message 📬\nName: {name} 🌟\nEmail: {email} ✉️\nMessage: {message} 📝\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
-            send_telegram_notification(message)
-            return jsonify({"message": "Message sent successfully! 🚀"}), 200
+            message_text = f"New Contact Message 📬\nName: {name} 🌟\nEmail: {email} ✉️\nMessage: {message} 📝\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰"
+            send_telegram_notification(order_number=None, cart_items=[], customer_details={}, final_total=0, payment_method=None, special_note=message_text)
+            return jsonify({"message": "Message sent successfully! 🚀", "stay": True}), 200
         except Exception as e:
             return jsonify({"error": f"Contact submission failed: {str(e)}"}), 500
     return render_template('contact.html')
@@ -490,8 +493,8 @@ def track_order():
                 return jsonify({"error": "Order number and phone are required"}), 400
             db.collection('tracking_requests').document().set({"order_number": order_number, "phone": phone, "timestamp": time.time()})
             message = f"New Order Tracking Request 📬\nOrder Number: {order_number} 🌟\nPhone: {phone} 📱\nTime: {time.strftime('%I:%M %p SAST, %B %d, %Y')} ⏰\nPlease follow up! 🚨"
-            send_telegram_notification(message)
-            return jsonify({"message": "Request submitted! We’ll get back to you soon. 🚀"}), 200
+            send_telegram_notification(order_number=None, cart_items=[], customer_details={}, final_total=0, payment_method=None, special_note=message)
+            return jsonify({"message": "Request submitted! We’ll get back to you soon. 🚀", "stay": True}), 200
         except Exception as e:
             return jsonify({"error": f"Tracking request failed: {str(e)}"}), 500
     return render_template('track_order.html')

@@ -2,11 +2,13 @@
 {% block title %}Checkout - 010 Café{% endblock %}
 {% block content %}
     <h1>Checkout 🛒💳</h1>
-    <div class="order-summary">
+    <div>
         <h2>Order Summary 🌟</h2>
         <ul>
             {% for item in cart_items %}
-                <li>{{ item.name }} - {% if 'quantity' in item %}R{{ item.amount|floatformat(2) }} x {{ item.quantity }} = R{{ item.total|floatformat(2) }}{% else %}R{{ item.amount|floatformat(2) }}{% endif %}</li>
+                <li>
+                    {{ item.name }} - {% if 'quantity' in item %}R{{ item.amount|floatformat(2) }} x {{ item.quantity }} = R{{ item.total|floatformat(2) }}{% else %}R{{ item.amount|floatformat(2) }}{% endif %}
+                </li>
             {% endfor %}
         </ul>
         <p>Total: R{{ total|floatformat(2) }} 💸</p>
@@ -14,61 +16,36 @@
             <p>Delivery Fee: R{{ delivery_fee|floatformat(2) }} ({{ distance_km|floatformat(2) }} km @ R6/km)</p>
         {% endif %}
     </div>
-    <form method="POST" id="checkoutForm">
+    <div>
         <h2>Customer Details 📝</h2>
-        <label for="name">Name*:</label>
-        <input type="text" name="name" id="name" value="{{ remembered_customer.get('name', '') }}" required>
-        <label for="surname">Surname:</label>
-        <input type="text" name="surname" id="surname" value="{{ remembered_customer.get('surname', '') }}">
-        <label for="phone">Phone*:</label>
-        <input type="text" name="phone" id="phone" value="{{ remembered_customer.get('phone', '') }}" required>
-        <label for="email">Email*:</label>
-        <input type="email" name="email" id="email" value="{{ remembered_customer.get('email', '') }}" required>
-        <label>Order Type:</label>
-        <input type="radio" name="delivery" value="false" checked> Collection 📦
-        <input type="radio" name="delivery" value="true" id="deliveryRadio"> Delivery 🚚
-        <label for="address" id="addressLabel" style="display: none;">Delivery Address:</label>
-        <input type="text" name="address" id="address" style="display: none;">
-        <label for="payment_method">Payment Method*:</label>
-        <select name="payment_method" id="payment_method" required>
-            <option value="" disabled selected>Select payment method</option>
-            <option value="Cash on delivery">Cash on delivery</option>
-            <option value="Cash on collection">Cash on collection</option>
-            <option value="Card on delivery">Card on delivery</option>
-            <option value="Card on collection">Card on collection</option>
-            <option value="In-App" disabled>In-App (coming soon)</option>
-        </select>
-        <label><input type="checkbox" name="remember"> Remember me</label>
-        <button type="submit">Place Order 🚀</button>
-    </form>
+        <form action="{{ url_for('checkout') }}" method="POST">
+            <label>Name*:</label>
+            <input type="text" name="name" placeholder="Name" value="{{ remembered_customer.get('name', '') }}" required>
+            <label>Surname:</label>
+            <input type="text" name="surname" placeholder="Surname" value="{{ remembered_customer.get('surname', '') }}">
+            <label>Phone*:</label>
+            <input type="text" name="phone" placeholder="Phone" value="{{ remembered_customer.get('phone', '') }}" required>
+            <label>Email*:</label>
+            <input type="email" name="email" placeholder="Email" value="{{ remembered_customer.get('email', '') }}" required>
+            <label>Special Note:</label>
+            <textarea name="special_note" placeholder="e.g., No cheese"></textarea>
+            <label>Order Type:</label>
+            <input type="radio" name="delivery" value="false" checked> Collection 📦
+            <input type="radio" name="delivery" value="true"> Delivery 🚚
+            <label>Delivery Address:</label>
+            <input type="text" name="address" placeholder="Delivery Address" {% if not remembered_customer.get('remembered') %}style="display:none;"{% endif %}>
+            <label>Payment Method*:</label>
+            <select name="payment_method" required>
+                <option value="" disabled selected>Select payment method</option>
+                <option value="Cash on delivery">Cash on delivery</option>
+                <option value="Cash on collection">Cash on collection</option>
+                <option value="Card on delivery">Card on delivery</option>
+                <option value="Card on collection">Card on collection</option>
+                <option value="In-App" disabled>In-App (coming soon)</option>
+            </select>
+            <label><input type="checkbox" name="remember"> Remember me</label>
+            <button type="submit">Place Order 🚀</button>
+        </form>
+    </div>
     <p><a href="{{ url_for('view_cart') }}">Back ⬅️</a></p>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deliveryRadio = document.querySelector('input[name="delivery"][value="true"]');
-            const addressInput = document.getElementById('address');
-            const addressLabel = document.getElementById('addressLabel');
-            deliveryRadio.addEventListener('change', function() {
-                addressInput.style.display = this.checked ? 'block' : 'none';
-                addressLabel.style.display = this.checked ? 'block' : 'none';
-            });
-            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                fetch('/checkout', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert('Error: ' + data.error);
-                    } else if (data.stay) {
-                        alert(data.message);
-                        window.location.href = '{{ url_for('home') }}';
-                    }
-                })
-                .catch(error => alert('Error submitting checkout: ' + error));
-            });
-        });
-    </script>
 {% endblock %}

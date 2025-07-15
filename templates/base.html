@@ -20,9 +20,8 @@
             background-color: #26a69a;
             padding: 10px 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
-        .nav-menu {
+        nav ul {
             list-style: none;
             margin: 0;
             padding: 0;
@@ -30,74 +29,75 @@
             gap: 15px;
             justify-content: center;
         }
-        .nav-menu li {
+        nav ul li {
             display: inline;
         }
-        .nav-menu li a {
+        nav ul li a {
             text-decoration: none;
             color: #fff;
             font-weight: bold;
-            padding: 10px 15px;
-            display: block;
+            padding: 5px 10px;
             transition: color 0.3s;
         }
-        .nav-menu li a:hover {
+        nav ul li a:hover {
             color: #d4e157;
         }
-        .hamburger {
-            display: none;
-            font-size: 24px;
-            color: #000000; /* Black hamburger menu */
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-        .content {
-            padding: 20px;
+        main {
+            flex: 1 0 auto;
             max-width: 1200px;
-            margin: 0 auto;
-            flex-grow: 1;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
             color: #000;
             text-align: center;
             margin-bottom: 15px;
         }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f9f1e7;
+            border-left: 4px solid #26a69a;
+            border-radius: 4px;
+        }
+        .menu-item .description {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
         form {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
         }
         input[type="number"], select, input[type="text"], input[type="email"], textarea {
-            padding: 10px;
+            padding: 5px 10px;
             margin-right: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 16px;
-            width: 100%;
-            max-width: 300px;
+            font-size: 14px;
+            width: 3em; /* 3-digit width for Qty */
         }
         select {
-            width: 100%;
-            padding: 10px;
+            width: 150px; /* Wide enough for "All-In-One 🟡" */
         }
         textarea {
             width: 100%;
             max-width: 300px;
             min-height: 100px;
-            padding: 10px;
         }
         button {
             background-color: #8d6e63;
             color: #fff;
             border: none;
             cursor: pointer;
-            padding: 10px 20px;
+            padding: 5px 10px;
             border-radius: 4px;
-            font-size: 16px;
-            min-width: 100px;
             transition: background-color 0.3s;
         }
         button:hover {
@@ -107,13 +107,12 @@
             color: #26a69a;
             text-decoration: none;
             font-weight: bold;
-            padding: 5px 10px;
-            display: inline-block;
         }
         a:hover {
             text-decoration: underline;
         }
         footer {
+            flex-shrink: 0;
             margin-top: auto;
             padding: 10px 0;
             background-color: #4a2c2a;
@@ -124,44 +123,33 @@
         footer a {
             color: #d4e157;
         }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
         @media (max-width: 600px) {
-            .hamburger {
-                display: block;
-                position: absolute;
-                top: 10px;
-                right: 20px;
-            }
-            .nav-menu {
-                display: none;
+            nav ul {
                 flex-direction: column;
-                position: absolute;
-                top: 60px;
-                left: 0;
-                right: 0;
-                background-color: #26a69a;
-                padding: 10px 0;
-                z-index: 1000;
-            }
-            .nav-menu.active {
-                display: flex;
-            }
-            .nav-menu li {
-                width: 100%;
                 text-align: center;
             }
-            .nav-menu li a {
-                padding: 15px;
-                font-size: 18px;
-            }
-            .content {
+            main {
+                margin: 10px;
                 padding: 10px;
             }
-            form {
-                width: 100%;
+            .menu-item {
+                flex-direction: column;
+                text-align: left;
             }
-            input[type="number"], select, input[type="text"], input[type="email"], textarea, button {
-                font-size: 14px;
-                padding: 8px;
+            .menu-item form {
+                margin-top: 5px;
                 width: 100%;
             }
         }
@@ -169,8 +157,7 @@
 </head>
 <body>
     <nav>
-        <button class="hamburger">☰</button>
-        <ul class="nav-menu">
+        <ul>
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('menus') }}">Menus</a></li>
             <li><a href="{{ url_for('store_location') }}">Store Location</a></li>
@@ -183,24 +170,44 @@
             <li><a href="{{ url_for('track_order') }}">Track Order</a></li>
         </ul>
     </nav>
-    <div class="content">
+    <main>
         {% block content %}
             {% if back_url %}
                 <p><a href="{{ back_url }}">Back ⬅️</a></p>
             {% endif %}
         {% endblock %}
-    </div>
+    </main>
     <footer>
         <p>📍 30558 Heald Street (Esihlahleni) Daveyton 1520</p>
-        <p>📞 0110701646 | 📧 <a href="mailto:chickenspott010@gmail.com">chickenspott010@gmail.com</a></p>
+        <p>📞 0792967180 | 📧 <a href="mailto:chickenspott010@gmail.com">chickenspott010@gmail.com</a></p>
         <p><a href="https://www.facebook.com/chickenspott/" target="_blank">Follow us on Facebook! 👍</a></p>
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const hamburger = document.querySelector('.hamburger');
-            const navMenu = document.querySelector('.nav-menu');
-            hamburger.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
+            // Handle all form submissions
+            const forms = document.querySelectorAll('form[action="/add_to_cart"], form[action="/remove_from_cart"], form[action="/checkout"], form[action="/contact"], form[action="/track_order"], form[action="/rate_us"]');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+                    const action = this.getAttribute('action');
+                    fetch(action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                            if (action === '/remove_from_cart') {
+                                location.reload(); // Auto-refresh after removing item
+                            }
+                        } else if (data.error) {
+                            alert('Error: ' + data.error);
+                        }
+                    })
+                    .catch(error => alert('Error submitting form: ' + error));
+                });
             });
         });
     </script>
