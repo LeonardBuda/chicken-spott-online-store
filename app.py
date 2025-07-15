@@ -206,7 +206,7 @@ def calculate_distance(origin, destination, api_key):
 
 # Add fixed-price item with flavor
 def add_fixed_price_item(item, quantity, flavor):
-    flavored_name = f"{item['name']} ({flavor})" if flavor != "All-In-One" else item['name']
+    flavored_name = f"{item['name']} ({flavor})"
     total = item["price"] * quantity
     cart_ref = db.collection('carts').document()
     cart_ref.set({"name": flavored_name, "amount": item["price"], "quantity": quantity, "total": total})
@@ -221,7 +221,7 @@ def add_fixed_price_item_no_flavor(item, quantity):
 
 # Add weighed item
 def add_weighed_item(item, amount, flavor):
-    flavored_name = f"{item['name']} ({flavor})" if flavor != "All-In-One" else item['name']
+    flavored_name = f"{item['name']} ({flavor})"
     cart_ref = db.collection('carts').document()
     cart_ref.set({"name": flavored_name, "amount": amount})
     return f"Added {flavored_name} worth R{amount:.2f} to cart! 🥩"
@@ -292,7 +292,7 @@ def add_to_cart():
     data = request.form
     item_name = data.get('name')
     quantity = int(data.get('quantity', 1))
-    flavor = data.get('flavor', 'All-In-One')
+    flavor = data.get('flavor', 'Hot')
     burger_type = data.get('burger_type', 'Cheese')
     amount = float(data.get('amount', 0))
 
