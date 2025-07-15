@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Home - 010 Café{% endblock %}
 {% block content %}
+    <style>
+        body {
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
     <h1>Welcome to 010 Café (Chicken Spott Daveyton)! 🍽️</h1>
     <p>Enjoy our delicious meals and friendly service at 010 Café! 🌟</p>
-    <p><a href="{{ url_for('menus') }}">View Menus 🥪</a> | <a href="{{ url_for('store_location') }}">Store Location 📍</a></p>
+    <p>
+        <a href="{{ url_for('menus') }}">View Menus 🥪</a> | 
+        <a href="{{ url_for('store_location') }}">Store Location 📍</a>
+    </p>
     <p>📞 0792967180 | 📧 <a href="mailto:chickenspott010@gmail.com">chickenspott010@gmail.com</a></p>
 {% endblock %}

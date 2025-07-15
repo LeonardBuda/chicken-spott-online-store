@@ -21,6 +21,14 @@
             background-color: #006D5B;
             padding: 10px 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo {
+            max-width: 100px;
+            height: auto;
+            margin-right: 20px;
         }
         nav ul {
             list-style: none;
@@ -145,6 +153,13 @@
             color: #3E2723;
         }
         @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            .logo {
+                margin-bottom: 10px;
+            }
             nav ul {
                 flex-direction: column;
                 text-align: center;
@@ -174,6 +189,7 @@
 </head>
 <body>
     <nav>
+        <a href="{{ url_for('home') }}"><img src="/static/logo.png" alt="010 Café Logo" class="logo"></a>
         <ul>
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('menus') }}">Menus</a></li>
